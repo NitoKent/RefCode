@@ -14,7 +14,7 @@ import (
 
 var Validate = validator.New()
 
-// Secret key for JWT signing (лучше хранить в конфигурации или переменных окружения)
+// Secret key for JWT signing
 var jwtSecret = []byte("your_secret_key")
 
 func ParseJSON(r *http.Request, payload any) error {
@@ -54,7 +54,7 @@ func GenerateJWT(userID int) (string, error) {
 	claims := &jwt.RegisteredClaims{
 		Issuer:    "RefApp",
 		Subject:   fmt.Sprint(userID),
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // Срок действия токена — 24 часа
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

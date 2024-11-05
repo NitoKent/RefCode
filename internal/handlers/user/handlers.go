@@ -26,14 +26,13 @@ func (h Handler) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
-	// Validations
+
 	if err := utils.Validate.Struct(payload); err != nil {
 		validationErrors := err.(validator.ValidationErrors)
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid payload: %v", validationErrors))
 		return
 	}
 
-	// Получаем пользователя по email
 	user, err := h.store.GetUserByEmail(payload.Email)
 	if err != nil {
 		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("user not found: %w", err))
@@ -45,7 +44,6 @@ func (h Handler) HandlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Генерация JWT-токена
 	token, err := utils.GenerateJWT(user.ID)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, fmt.Errorf("could not generate token: %w", err))

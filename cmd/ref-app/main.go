@@ -44,10 +44,14 @@ func main() {
 
 	// Init Router
 	r := mux.NewRouter()
+
 	// Auth
+
 	r.HandleFunc("/register", userHandler.HandlerRegister).Methods("POST")
 	r.HandleFunc("/login", userHandler.HandlerLogin).Methods("POST")
+
 	// Ref_Code
+
 	r.Handle("/create-referral-code", middleware.AuthMiddleware(http.HandlerFunc(referralHandler.CreateRefCode))).Methods("POST")
 	r.Handle("/referral-code/delete", middleware.AuthMiddleware(http.HandlerFunc(referralHandler.DeleteRefCode))).Methods("DELETE")
 
@@ -57,6 +61,7 @@ func main() {
 	r.HandleFunc("/referrals", infoHandler.GetReferralsByIdReferrer).Methods("POST")
 
 	// Start Server
+
 	log.Info("Starting server on :8077")
 	if err := http.ListenAndServe(":8077", r); err != nil {
 		log.Error("failed to start server", sl.Err(err))
